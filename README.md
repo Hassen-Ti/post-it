@@ -46,10 +46,12 @@ Niveaux : `post-it lite`, `post-it` (full, par défaut), `post-it ultra`, `post-
 | `skills/post-it-inbox` | Tri des mails, de Teams et de Slack, et brouillons de réponse |
 | `skills/post-it-reunion` | Préparation de réunion et compte rendu |
 | `skills/post-it-review` | Liste de coupes sur un livrable existant |
+| `skills/post-it-fichiers` | Méthode pour les dossiers de fichiers (PDF, scans, Factur-X, Excel, exports) + script d'inventaire par le contenu |
 | `skills/post-it-aide` | Carte d'aide |
 | `shared/garde-fous.md` | Envoi, fraude, chiffres, RGPD : les règles communes |
 | `.mcp.json` | Connecteurs proposés avec le plugin : Microsoft 365, Gmail, Google Agenda, Google Drive (Slack : à brancher depuis tes connecteurs) |
 | `evals/` | Tests avec / sans plugin : `claude plugin eval . --runs 2` |
+| `scripts/bench_cowork.py` | Banc « Cowork » : Claude avec un shell sur un dossier Téléchargements piégé (`make_fixture_telechargements.py`), avec / sans plugin |
 
 ## Construire
 

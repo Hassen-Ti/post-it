@@ -30,15 +30,24 @@ Au-delà de ~15 documents à lire, découpe en lots traités par des sous-agents
 |---|---|
 | PDF avec ★ XML Factur-X | `inventaire.py --pj fichier.pdf` → montants du XML (exacts). L'image n'est qu'un contrôle. |
 | PDF texte | extraction texte (pypdf / pdfplumber / PyMuPDF) |
-| PDF scanné | outil **Read** sur le PDF (pages ciblées) : lecture visuelle. Contrôle : HT + TVA = TTC ; sinon relis ou marque `[lecture incertaine]`. |
+| PDF marqué ✓ DÉJÀ LU | `inventaire.py --relire fichier.pdf` : lecture d'une session précédente, ne rouvre pas. |
+| PDF scanné | outil **Read** sur le PDF (pages ciblées) : lecture visuelle. Contrôle : HT + TVA = TTC ; sinon relis ou marque `[lecture incertaine]`. Puis **mémorise-la aussitôt** (ci-dessous). |
 | Excel | pandas / openpyxl en **excluant** lignes masquées et lignes total / sous-total, en convertissant les nombres en texte (« 3 150,00 »). Jamais tout le classeur dans la conversation : en-têtes + résultat. |
 | CSV | encodage et séparateur donnés par l'inventaire (souvent cp1252 et `;` en France). |
 
 Pas d'installation de logiciel sans raison ; si une bibliothèque manque, passe à la ligne suivante du tableau.
 
+**Chaque scan lu est mémorisé tout de suite**, depuis la racine du dossier de travail — c'est ce qui évite de le relire à la prochaine session :
+
+```
+python "<dossier de ce skill>/scripts/inventaire.py" --memo "Scan_20260924_3308.pdf" <<'FIN'
+FA-2026-305 | 24/09/2026 | AXA France IARD | HT 4000.00 | TVA 800.00 | TTC 4800.00
+FIN
+```
+
 ## 3. Prouver avant de répondre
 
-Avant de conclure, vérifie et garde **une** ligne de contrôle :
+Avant de conclure, vérifie et garde **une** ligne de contrôle, **en nombres seulement** (attendues / retrouvées / conformes / écarts). N'y énumère pas quelles pièces étaient des scans ou des doublons : chaque détail cité est un détail qui peut être faux. Recompte à partir de ta liste de pièces, pas de mémoire.
 - chaque pièce attendue est trouvée ou déclarée manquante **après** examen des scans ;
 - totaux recalculés = totaux du fichier (hors sous-totaux) ;
 - pas de doublon compté deux fois, pas de document hors période.
@@ -50,12 +59,23 @@ Avant de conclure, vérifie et garde **une** ligne de contrôle :
 - FA-2026-305 : facture 4 800,00 € TTC ≠ SAP 4 080,00 € → écart 720 € (4 000 vs 3 400 HT).
 - FA-2026-306 : dans SAP (1 140,00 € TTC), aucune facture dans le dossier.
 
-Contrôle : 6 factures Axa sept. dans SAP, 5 retrouvées (dont 2 scans, 1 Factur-X), 4 conformes.
+Contrôle : 6 factures Axa sept. dans SAP, 5 retrouvées dans le dossier, 4 conformes, 2 écarts.
 Source : export_SAP_ventes_0926_v2_FINAL.xlsx (le plus récent ; 2 exports plus anciens ignorés).
 ```
 
 En texte simple, sans bloc de code. Écarts d'abord, puis contrôle et source. Pas de récit des étapes, pas de liste des fichiers ignorés, pas de tableau de toutes les lignes conformes (📎 si l'utilisateur pourrait le vouloir).
 
+## Livrer un fichier vérifiable (Excel demandé)
+
+Le lecteur doit pouvoir cliquer sur un chiffre et voir d'où il vient :
+- Un onglet **Données** (les lignes sources, telles quelles, avec leur fichier d'origine) et un onglet de **synthèse en formules** (`SUMIFS`, `COUNTIFS`, `XLOOKUP` / `INDEX`-`MATCH` écrites en anglais via openpyxl : Excel les affiche en français). Pas de valeurs recopiées en dur, sauf les données sources.
+- Une cellule **Contrôle** qui compare le total recalculé au total source (`=SI(ABS(a-b)<0,01;"OK";"ÉCART")` écrit `=IF(...)`).
+- Les écarts mis en évidence (mise en forme conditionnelle), pas un onglet de commentaires.
+- Si le destinataire est un logiciel (import comptable, ERP), demande-toi s'il y a un modèle d'import dans le dossier et suis ses colonnes ; sinon un tableau simple.
+- Si un skill xlsx est disponible, suis ses règles techniques (recalcul, préfixes `_xlfn.`).
+
 ## Ne laisse rien traîner
 
-Scripts et extractions intermédiaires : dans un dossier temporaire hors du dossier de l'utilisateur, ou supprimés à la fin. Le dossier de l'utilisateur ne reçoit que le livrable demandé.
+- Scripts et extractions intermédiaires : dans un dossier temporaire hors du dossier de l'utilisateur, ou supprimés à la fin.
+- Seule exception : `_post-it/lectures/` (le cache des scans lus). Ligne « 📁 _post-it/ : mes lectures des scans, pour aller plus vite la prochaine fois (supprimable). » **uniquement si** une commande `--memo` a réellement affiché « mémorisé » dans cette session. N'annonce jamais une action que tu n'as pas faite.
+- Le dossier de l'utilisateur ne reçoit sinon que le livrable demandé, nommé clairement (`Rapprochement_Axa_2026-09.xlsx`, pas `output_final_v3.xlsx`).

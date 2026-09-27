@@ -2,6 +2,11 @@
 
     python inventaire.py [dossier]                  # inventaire (défaut : dossier courant)
     python inventaire.py --pj fichier.pdf           # affiche les pièces jointes (XML Factur-X…)
+    python inventaire.py --memo fichier.pdf < txt   # mémorise ta lecture d'un scan (cache _post-it/)
+    python inventaire.py --relire fichier.pdf       # ré-affiche une lecture mémorisée
+
+Cache : lectures rangées dans ./_post-it/lectures/<empreinte>.txt (lancer depuis la racine du dossier).
+L'empreinte porte sur le contenu : si le fichier change, l'ancienne lecture n'est plus proposée.
 
 Détecte : PDF texte / scanné (pages sans texte), XML Factur-X / ZUGFeRD embarqué, doublons
 (contenu identique), noms non parlants (Scan_, IMG_, document…), versions (v2, final, (1)),
@@ -19,6 +24,10 @@ NON_PARLANT = re.compile(r"^(scan|img|image|doc|document|numeris|sans.?titre|unt
 VERSION = re.compile(r"\(\d+\)|v\d+|final|copie|copy", re.I)
 TOTAL = re.compile(r"\b(sous-?total|total|cumul)\b", re.I)
 NOMBRE_TEXTE = re.compile(r"^-?\d{1,3}([  .]\d{3})*(,\d+)?$|^-?\d+,\d+$")
+
+
+def lecture_path(p, root="."):
+    return Path(root) / "_post-it" / "lectures" / f"{hashlib.md5(Path(p).read_bytes()).hexdigest()}.txt"
 
 
 def pdf_info(p):
@@ -103,6 +112,8 @@ def main(root):
             flags.append("nom non parlant → regarder le contenu")
         if VERSION.search(p.stem):
             flags.append("version/copie")
+        if lecture_path(p, root).exists():
+            flags.append("✓ DÉJÀ LU → --relire, inutile de rouvrir")
         ext = p.suffix.lower()
         detail = ""
         try:
@@ -145,5 +156,13 @@ if __name__ == "__main__":
     if len(sys.argv) == 3 and sys.argv[1] == "--pj":
         for nom, data in pdf_pj(sys.argv[2]).items():
             print(f"===== {nom}\n{data.decode('utf-8', errors='replace')}")
+    elif len(sys.argv) == 3 and sys.argv[1] == "--memo":
+        cible = lecture_path(sys.argv[2])
+        cible.parent.mkdir(parents=True, exist_ok=True)
+        cible.write_text(f"# {Path(sys.argv[2]).name}\n" + sys.stdin.read(), encoding="utf-8")
+        print(f"mémorisé : {cible.as_posix()}")
+    elif len(sys.argv) == 3 and sys.argv[1] == "--relire":
+        cible = lecture_path(sys.argv[2])
+        print(cible.read_text(encoding="utf-8") if cible.exists() else "aucune lecture mémorisée (ou fichier modifié depuis)")
     else:
         main(sys.argv[1] if len(sys.argv) > 1 else ".")
