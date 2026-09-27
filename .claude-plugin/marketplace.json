@@ -1,0 +1,16 @@
+{
+  "name": "post-it",
+  "owner": {
+    "name": "Hassene Tilioua"
+  },
+  "metadata": {
+    "description": "Post-it : Claude en mode collègue efficace pour les métiers de bureau."
+  },
+  "plugins": [
+    {
+      "name": "post-it",
+      "source": "./",
+      "description": "Le collègue le plus efficace de l'étage : la réponse, pas le deck. Pour les métiers de bureau."
+    }
+  ]
+}

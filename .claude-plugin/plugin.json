@@ -1,0 +1,24 @@
+{
+  "name": "post-it",
+  "displayName": "Post-it",
+  "version": "1.0.0",
+  "description": "Le collègue le plus efficace de l'étage. Pour les métiers de bureau (finance, compta, contrôle de gestion, RH, facturation, BA) : lit tes mails, Teams et fichiers via tes connecteurs, et répond à la question — pas un deck quand un post-it suffit. Chiffres sourcés, RGPD et validation humaine jamais coupés.",
+  "author": {
+    "name": "Hassene Tilioua"
+  },
+  "keywords": [
+    "bureau",
+    "concision",
+    "email",
+    "outlook",
+    "teams",
+    "microsoft-365",
+    "gmail",
+    "finance",
+    "rh",
+    "comptabilite",
+    "controle-de-gestion",
+    "productivite"
+  ],
+  "hooks": "./hooks/hooks.json"
+}
