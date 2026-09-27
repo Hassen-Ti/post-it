@@ -6,6 +6,8 @@
   "author": {
     "name": "Hassene Tilioua"
   },
+  "license": "Apache-2.0",
+  "repository": "https://github.com/Hassen-Ti/post-it",
   "keywords": [
     "bureau",
     "concision",

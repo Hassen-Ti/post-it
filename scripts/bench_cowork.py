@@ -32,10 +32,11 @@ TOOLS = "Bash Read Glob Grep Write Edit TodoWrite Task Skill"
 COWORK_CONTEXT = ("L'utilisateur t'a donné accès à son dossier Téléchargements : c'est le dossier de travail "
                   "courant. Tu n'as accès à aucun autre dossier de son ordinateur.")
 # Garde-fou du banc : jamais le vrai profil utilisateur.
+_HOME = Path.home().as_posix()               # ex. C:/Users/<vous>
+_HOME_RULE = "//" + _HOME[0].lower() + _HOME[2:] if ":" in _HOME else "/" + _HOME
 HOME_GUARD = json.dumps({"permissions": {"deny": [
-    "Read(//c/Users/tilio/**)", "Glob(//c/Users/tilio/**)", "Grep(//c/Users/tilio/**)",
-    "Edit(//c/Users/tilio/**)", "Write(//c/Users/tilio/**)",
-    "Bash(*Users/tilio*)", "Bash(*Users\tilio*)", "Bash(*~/*)", "Bash(*$HOME*)", "Bash(*USERPROFILE*)",
+    *(f"{t}({_HOME_RULE}/**)" for t in ("Read", "Glob", "Grep", "Edit", "Write")),
+    f"Bash(*{_HOME.split('/', 1)[-1]}*)", "Bash(*~/*)", "Bash(*$HOME*)", "Bash(*USERPROFILE*)",
     "Bash(*Downloads*)", "PowerShell"]}})
 
 
