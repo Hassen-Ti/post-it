@@ -1,0 +1,31 @@
+name: Idée / nouveau skill
+description: Un métier, une tâche de bureau ou un comportement que Post-it devrait couvrir.
+labels: ["idee"]
+body:
+  - type: textarea
+    id: probleme
+    attributes:
+      label: La tâche du quotidien
+      description: Qui la fait, à quelle fréquence, et ce qui fait perdre du temps aujourd'hui.
+      placeholder: « En compta fournisseurs, je rapproche chaque semaine 200 lignes de relevé avec les factures… »
+    validations:
+      required: true
+  - type: textarea
+    id: exemple
+    attributes:
+      label: Exemple de demande et de réponse idéale
+      description: La phrase qu'un utilisateur taperait, et le post-it qu'il voudrait recevoir.
+    validations:
+      required: true
+  - type: textarea
+    id: pieges
+    attributes:
+      label: Les pièges du métier
+      description: Ce qu'un débutant (ou Claude) raterait. C'est ce qui rend un skill utile.
+  - type: checkboxes
+    id: aide
+    attributes:
+      label: Participation
+      options:
+        - label: Je peux écrire le skill
+        - label: Je peux écrire un cas de test (evals/)

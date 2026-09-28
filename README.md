@@ -1,5 +1,7 @@
 # Post-it
 
+[![Tests](https://github.com/Hassen-Ti/post-it/actions/workflows/tests.yml/badge.svg)](https://github.com/Hassen-Ti/post-it/actions/workflows/tests.yml)
+
 [Français](#français) · [English](#english)
 
 ## Français
@@ -50,6 +52,10 @@ Les chiffres et leur source · le RGPD · ta validation : **rien n'est envoyé, 
 - « post-it review » + le mail ou le deck à raccourcir
 
 `post-it lite` / `ultra` / `off` pour régler l'intensité. `post-it aide` pour le reste.
+
+### Contribuer
+
+Une réponse trop longue, un fichier raté, un métier qui manque ? [Ouvre une issue](https://github.com/Hassen-Ti/post-it/issues/new/choose) : chaque cas signalé devient un test. Pour coder : [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## English
 
@@ -102,5 +108,9 @@ Numbers and their source · GDPR · your approval: **nothing is sent, paid or de
 
 The plugin's instructions are written in French; Claude answers in your language.
 
+### Contribute
+
+A too-long answer, a missed file, a missing job? [Open an issue](https://github.com/Hassen-Ti/post-it/issues/new/choose): every reported case becomes a test. To code: [CONTRIBUTING.md](CONTRIBUTING.md) (English welcome).
+
 ---
-Licence / License : Apache-2.0 · Tests : [`evals/`](evals), [`scripts/`](scripts)
+Licence / License : Apache-2.0 · Tests : [`tests/`](tests) (automatiques / automated), [`evals/`](evals) (comportement / behaviour)

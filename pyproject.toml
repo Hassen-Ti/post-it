@@ -1,0 +1,10 @@
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["tests"]
+
+[tool.ruff]
+line-length = 130
+
+[tool.ruff.lint]
+# E741 : `l` pour « ligne » est l'usage du projet.
+ignore = ["E741"]

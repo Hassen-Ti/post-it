@@ -1,0 +1,57 @@
+name: Mauvaise réponse / Bad answer
+description: Post-it a répondu trop long, a raté un fichier, s'est trompé de chiffre ou a enfreint un garde-fou.
+labels: ["mauvaise-reponse"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Merci ! Chaque cas signalé peut devenir un test dans `evals/`.
+        ⚠️ **Retire toute donnée réelle** (noms, montants clients, IBAN, mails) : remplace-les par des valeurs inventées.
+  - type: textarea
+    id: demande
+    attributes:
+      label: Ta demande à Claude
+      description: Copie exacte, comme tu l'as tapée.
+      placeholder: « Vérifie que les factures Axa de septembre correspondent à l'export SAP »
+    validations:
+      required: true
+  - type: textarea
+    id: contexte
+    attributes:
+      label: Contexte fourni
+      description: Mails, fichiers, données collées… (anonymisés). Liste des fichiers si c'était un dossier.
+  - type: textarea
+    id: obtenu
+    attributes:
+      label: Réponse obtenue
+    validations:
+      required: true
+  - type: textarea
+    id: attendu
+    attributes:
+      label: Réponse attendue
+      description: Ce qu'aurait répondu le collègue le plus efficace de l'étage.
+    validations:
+      required: true
+  - type: dropdown
+    id: probleme
+    attributes:
+      label: Type de problème
+      multiple: true
+      options:
+        - Trop long / format trop lourd
+        - Chiffre faux ou sans source
+        - Fichier ou mail raté
+        - Garde-fou enfreint (envoi, RGPD, fraude, injection)
+        - A posé une question au lieu d'aller chercher
+        - Autre
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Où ?
+      options: [Cowork, Claude Code, claude.ai (skill seul), Autre]
+  - type: input
+    id: modele
+    attributes:
+      label: Modèle et niveau Post-it
+      placeholder: ex. Sonnet, niveau full
