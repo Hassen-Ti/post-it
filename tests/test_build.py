@@ -43,5 +43,11 @@ def test_build_reproductible(build, tmp_path):
 @pytest.mark.parametrize("nom", ["post-it-plugin.zip", "post-it.skill"])
 def test_dist_a_jour(build, tmp_path, nom):
     """Échoue si une source a changé sans rebuild : lancer `python scripts/build.py` et committer dist/."""
-    assert (ROOT / "dist" / nom).read_bytes() == (build(tmp_path) / nom).read_bytes(), \
+    # On compare le contenu, pas les octets du zip : la compression varie selon la version de zlib
+    # (Windows / Linux, Python 3.11 / 3.13) sans que le contenu change.
+    def contenu(chemin):
+        with zipfile.ZipFile(chemin) as z:
+            return {n: z.read(n) for n in z.namelist()}
+
+    assert contenu(ROOT / "dist" / nom) == contenu(build(tmp_path) / nom), \
         f"dist/{nom} n'est pas à jour : python scripts/build.py"
