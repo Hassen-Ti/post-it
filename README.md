@@ -2,60 +2,51 @@
 
 *Il ne fait pas de deck. Il colle un post-it. Ça suffit.*
 
-Post-it fait travailler Claude comme le collègue le plus efficace de l'étage. Il s'adresse aux métiers de bureau : finance, compta, contrôle de gestion, facturation, RH, business analyse.
+Un plugin Claude (Cowork, Claude Code) pour les métiers de bureau — finance, compta, contrôle de gestion, facturation, RH. Claude travaille comme le collègue le plus efficace de l'étage : il va chercher lui-même dans tes mails et tes fichiers, et te rend **la réponse**, pas un rapport.
 
-- **Il fait le travail.** Il lit lui-même tes mails, tes messages Teams, ton agenda et tes fichiers via tes connecteurs (Microsoft 365, Gmail, Slack…). Pas besoin de « bien prompter ».
-- **Il répond court.** Il choisit le format le plus léger qui marche : chat < mail < tableau < document < présentation.
-- **Il ne coupe jamais l'essentiel.** Les chiffres gardent leur source, le RGPD et la piste d'audit sont respectés. Il n'envoie, ne paie et ne supprime **rien** sans ton « oui ».
+Inspiré de [Ponytail](https://github.com/DietrichGebert/ponytail), qui fait la même chose pour le code.
 
-C'est l'équivalent de [Ponytail](https://github.com/DietrichGebert/ponytail) pour le travail de bureau.
+## Avant / après
+
+> « Vérifie que les factures Axa de septembre correspondent à l'export SAP. Tout est dans mes téléchargements. »
+
+**Sans Post-it** — 300 à 450 mots, tableaux, « points d'attention »… et souvent deux factures déclarées manquantes : elles étaient là, dans des scans nommés `Scan_20260910_2824.pdf`.
+
+**Avec Post-it :**
+```
+Écarts (2)
+- FA-2026-305 : facture 4 800,00 € TTC ≠ SAP 4 080,00 € → écart 720 €.
+- FA-2026-306 : dans SAP (1 140,00 € TTC), aucune facture dans le dossier.
+
+Contrôle : 6 factures dans SAP, 5 retrouvées, 4 conformes, 2 écarts.
+Source : export_SAP_ventes_0926_v2_FINAL.xlsx (le plus récent des 3).
+```
+
+Sur ce test (dossier Téléchargements piégé : scans, Factur-X, 3 versions d'export, doublons) : bons écarts **3/3 essais avec Post-it, 1/3 sans**, réponse 3 à 4× plus courte, et l'Excel demandé ensuite arrive avec ses formules et une cellule de contrôle au lieu de valeurs en dur.
+
+## Ce qu'il ne coupe jamais
+
+Les chiffres et leur source · le RGPD · ta validation : **rien n'est envoyé, payé ou supprimé sans ton « oui »**. Un mail qui demande de changer un RIB est signalé, jamais traité.
 
 ## Installer
 
-**Cowork / Claude Desktop :** Paramètres → Plugins → téléverser `dist/post-it-plugin.zip`. Branche ensuite tes connecteurs dans Paramètres → Connecteurs : Microsoft 365 (Outlook, Teams, OneDrive/SharePoint) ou Gmail / Google Agenda, et Slack si tu l'utilises. Post-it se sert de ceux qui sont branchés, quel que soit l'éditeur.
+**Cowork** — télécharge [`dist/post-it-plugin.zip`](dist/post-it-plugin.zip), puis *Paramètres → Plugins → Téléverser*. Branche tes connecteurs (Microsoft 365 ou Gmail).
 
-**Claude Code :**
+**Claude Code**
 ```
-/plugin marketplace add <chemin-ou-repo-git-de-ce-dossier>
+/plugin marketplace add Hassen-Ti/post-it
 /plugin install post-it@post-it
 ```
 
-**Chat claude.ai sans plugin :** importe `dist/post-it.skill` comme skill. Sans hook, il se déclenche seulement quand la demande ressemble à du travail de bureau.
+## Essaie
 
-## Utiliser
+- « Trie mes mails »
+- « Prépare ma réunion de 14h »
+- « Rapproche les factures du relevé, tout est dans mes téléchargements »
+- « post-it review » + le mail ou le deck à raccourcir
 
-Demande comme à un collègue :
+`post-it lite` / `ultra` / `off` pour régler l'intensité. `post-it aide` pour le reste.
 
-| Tu dis | Tu obtiens |
-|---|---|
-| « Trie mes mails » / « J'ai raté quoi sur Teams ? » | Les 3 choses pour toi + les brouillons prêts |
-| « Réponds au mail de Paul » | Un brouillon dans le fil, pas envoyé |
-| « Prépare ma réunion de 14h » | 3 lignes : enjeu, ce qu'on attend de toi, ce qui est à décider |
-| « Fais le CR » + transcription | Décisions + actions (qui, quoi, quand) |
-| « post-it review » + un livrable | Ce qu'on peut couper, sans réécrire : `12 slides → 5` |
-| « post-it aide » | La carte d'aide avec des exemples par métier |
+---
 
-Niveaux : `post-it lite`, `post-it` (full, par défaut), `post-it ultra`, `post-it off`.
-
-## Contenu
-
-| Élément | Rôle |
-|---|---|
-| `hooks/` | Réinjecte les règles Post-it à chaque début de session (toujours actif, comme Ponytail) |
-| `skills/post-it` | Le mode lui-même : l'échelle de décision, ce qui ne se coupe jamais, les niveaux |
-| `skills/post-it-inbox` | Tri des mails, de Teams et de Slack, et brouillons de réponse |
-| `skills/post-it-reunion` | Préparation de réunion et compte rendu |
-| `skills/post-it-review` | Liste de coupes sur un livrable existant |
-| `skills/post-it-fichiers` | Méthode pour les dossiers de fichiers (PDF, scans, Factur-X, Excel, exports) + script d'inventaire par le contenu |
-| `skills/post-it-aide` | Carte d'aide |
-| `shared/garde-fous.md` | Envoi, fraude, chiffres, RGPD : les règles communes |
-| `.mcp.json` | Connecteurs proposés avec le plugin : Microsoft 365, Gmail, Google Agenda, Google Drive (Slack : à brancher depuis tes connecteurs) |
-| `evals/` | Tests avec / sans plugin : `claude plugin eval . --runs 2` |
-| `scripts/bench_cowork.py` | Banc « Cowork » : Claude avec un shell sur un dossier Téléchargements piégé (`make_fixture_telechargements.py`), avec / sans plugin |
-
-## Construire
-
-```
-python scripts/build.py
-```
-Cette commande produit `dist/post-it-plugin.zip` (le plugin) et `dist/post-it.skill` (le skill seul).
+Licence Apache-2.0 · Tests et banc « Cowork » dans [`evals/`](evals) et [`scripts/`](scripts).
