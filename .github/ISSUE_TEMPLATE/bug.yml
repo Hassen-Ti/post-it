@@ -1,0 +1,23 @@
+name: Bug technique
+description: Installation, hook, script inventaire.py, build… (pour une réponse de Claude, utilise « Mauvaise réponse »).
+labels: ["bug"]
+body:
+  - type: textarea
+    id: quoi
+    attributes:
+      label: Ce qui se passe
+      description: Message d'erreur complet si possible.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduire
+    attributes:
+      label: Pour reproduire
+      placeholder: "1. /plugin install post-it@post-it\n2. …"
+    validations:
+      required: true
+  - type: input
+    id: env
+    attributes:
+      label: Environnement
+      placeholder: ex. Claude Code 2.1 sous Windows 11, Python 3.12

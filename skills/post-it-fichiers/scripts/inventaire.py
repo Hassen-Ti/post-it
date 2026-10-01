@@ -23,7 +23,8 @@ from pathlib import Path
 NON_PARLANT = re.compile(r"^(scan|img|image|doc|document|numeris|sans.?titre|untitled|file|fichier|\d{6,})", re.I)
 VERSION = re.compile(r"\(\d+\)|v\d+|final|copie|copy", re.I)
 TOTAL = re.compile(r"\b(sous-?total|total|cumul)\b", re.I)
-NOMBRE_TEXTE = re.compile(r"^-?\d{1,3}([  .]\d{3})*(,\d+)?$|^-?\d+,\d+$")
+# Séparateurs de milliers : espace, espace insécable (Excel/SAP en français), espace fine insécable, point.
+NOMBRE_TEXTE = re.compile(r"^-?\d{1,3}([ \u00a0\u202f.]\d{3})*(,\d+)?$|^-?\d+,\d+$")
 
 
 def lecture_path(p, root="."):
@@ -153,6 +154,8 @@ def main(root):
 
 
 if __name__ == "__main__":
+    # Sous Windows, une sortie redirigée est en cp1252 par défaut : ★ ✓ ⚠ y feraient planter le script.
+    sys.stdout.reconfigure(encoding="utf-8")
     if len(sys.argv) == 3 and sys.argv[1] == "--pj":
         for nom, data in pdf_pj(sys.argv[2]).items():
             print(f"===== {nom}\n{data.decode('utf-8', errors='replace')}")

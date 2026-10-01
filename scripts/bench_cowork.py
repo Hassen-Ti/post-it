@@ -82,7 +82,7 @@ def excel_check(work, created):
 
 
 def analyse(stdout):
-    res, tools, texts = {}, [], []
+    res, tools = {}, []
     for line in stdout.splitlines():
         try:
             m = json.loads(line)

@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Signaler une faille de sécurité
+    url: https://github.com/Hassen-Ti/post-it/security/advisories/new
+    about: Injection, fuite de données, garde-fou contourné — en privé, pas en issue publique.

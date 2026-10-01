@@ -1,0 +1,8 @@
+# Pour lancer les tests : pip install -r requirements-dev.txt && pytest
+pytest>=8
+pyyaml>=6
+pymupdf>=1.24
+pypdf>=4
+openpyxl>=3.1
+pillow>=10
+ruff==0.15.8  # version figée : une nouvelle version de ruff ne doit pas casser la CI toute seule
