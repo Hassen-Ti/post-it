@@ -39,10 +39,12 @@ Ils vérifient ce qu'on casse sans le voir : un `name` de skill qui ne correspon
 **2. Evals de comportement — ce que Claude répond vraiment**
 
 ```bash
-claude plugin eval . --tag stress --runs 3          # un tag
-claude plugin eval . --case q-delai-paiement        # un cas
-claude plugin eval . --scaffold --allow-tools Bash Write Edit   # tout, y compris le dossier piégé
+claude plugin eval . --judge-model sonnet --tag stress --runs 3     # un tag
+claude plugin eval . --judge-model sonnet --case q-delai-paiement   # un cas
+claude plugin eval . --judge-model sonnet --scaffold --allow-tools Bash Write Edit   # tout, y compris le dossier piégé
 ```
+
+Toujours `--judge-model sonnet` : le juge par défaut (Haiku) rejetait des réponses conformes sur les critères longs (0 PASS sur 6 contre 6 sur 6 avec Sonnet, réponse vérifiée à la main). Sous Linux, le bac à sable demande `bubblewrap` et `socat` (`apt install bubblewrap socat`), sinon les cas avec Bash sont refusés.
 
 Ils appellent Claude (avec et sans Post-it) et coûtent des crédits : lance au moins les cas touchés par ta modif et colle le score dans la PR. Le mainteneur peut aussi les lancer depuis l'onglet *Actions → Evals*.
 
