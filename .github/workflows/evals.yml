@@ -32,13 +32,14 @@ jobs:
         with:
           node-version: 22
       - run: npm install -g @anthropic-ai/claude-code
+      - run: sudo apt-get install -y bubblewrap socat  # bac à sable exigé pour les cas qui utilisent Bash
       - name: claude plugin eval
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           TAG: ${{ inputs.tag }}
           RUNS: ${{ inputs.runs }}
         run: |
-          claude plugin eval . --trust-plugin --scaffold --allow-tools Bash Write Edit \
+          claude plugin eval . --trust-plugin --judge-model sonnet --scaffold --allow-tools Bash Write Edit \
             --runs "$RUNS" --no-publish --report evals/results/report.html --json evals/results/result.json \
             ${TAG:+--tag "$TAG"}
       - uses: actions/upload-artifact@v4
